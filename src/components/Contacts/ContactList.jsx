@@ -1,21 +1,18 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import styles from './ContactList.module.css';
+import PropTypes from 'prop-types';
 
-export default class Contacts extends Component {
-  render() {
-    const { contacts } = this.props;
-    return (
-      <div className={`box ${styles.contactsList}`}>
-        {this.renderList(contacts)}
-      </div>
-    );
-  }
-  handleDelete = id => {
-    if (this.props.onDeleteContact) {
-      this.props.onDeleteContact(id);
+const ContactList = ({ contacts, onDeleteContact }) => {
+  const handleDelete = id => {
+    if (onDeleteContact) {
+      onDeleteContact(id);
     }
   };
-  renderList = items => {
+
+  useEffect(() => {
+    console.log('Contacts component was mounted');
+  }, []);
+  const renderList = items => {
     return items.map(el => {
       const name = `${el.name}`;
       const number = `${el.number}`;
@@ -24,11 +21,21 @@ export default class Contacts extends Component {
         <div key={el.id} className={styles.phonebookListItem}>
           <span>{name}:</span>
           <span>{number}</span>
-          <button type="button" onClick={() => this.handleDelete(el.id)}>
+          <button type="button" onClick={() => handleDelete(el.id)}>
             Delete
           </button>
         </div>
       );
     });
   };
-}
+  return (
+    <div className={`box ${styles.contactsList}`}>{renderList(contacts)}</div>
+  );
+};
+
+ContactList.propTypes = {
+  onFormSubmit: PropTypes.func,
+  onDeleteContact: PropTypes.func,
+};
+
+export default ContactList;

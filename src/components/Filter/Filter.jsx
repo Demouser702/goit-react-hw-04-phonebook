@@ -1,31 +1,32 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-export default class Filter extends Component {
-  state = {
-    filter: '',
-  };
-  handleChange = evt => {
-    const { value } = evt.target;
-    this.setState({ filter: value });
-    this.props.onChange(value);
-  };
+function Filter(onChange) {
+  const [filter, setFilter] = useState('');
 
-  render() {
-    const { filter } = this.state;
-    return (
-      <form className="form">
-        <label>
-          <span>Find contacts by name</span>
-          <input
-            className="form-input "
-            value={filter}
-            name="filter"
-            type="text"
-            placeholder=""
-            onChange={this.handleChange}
-          />
-        </label>
-      </form>
-    );
-  }
+  useEffect(() => {
+    setFilter(filter);
+  }, [filter, setFilter]);
+
+  return (
+    <form className="form">
+      <label>
+        <span>Find contacts by name</span>
+        <input
+          className="form-input "
+          value={filter}
+          name="filter"
+          type="text"
+          placeholder=""
+          onChange={evt => setFilter(evt.target.value)}
+        />
+      </label>
+    </form>
+  );
 }
+
+Filter.propTypes = {
+  onChange: PropTypes.func,
+};
+
+export default Filter;
